@@ -1,0 +1,51 @@
+F1-SWITCH
+=========
+
+Enterprise Multi-Floor Network
+1st Floor Switch Configuration
+
+! VLAN CONFIGURATION
+vlan 30
+ name SALES
+exit
+
+vlan 40
+ name HR
+exit
+
+vlan 50
+ name FINANCE
+exit
+
+! ROUTER CONNECTION - TRUNK
+interface fa0/1
+ switchport mode trunk
+exit
+
+! Reception
+ interface range fa0/2-3
+ switchport mode access
+ switchport access vlan 80
+ spanning-tree portfast
+exit
+
+! Store
+interface range fa0/4-5
+ switchport mode access
+ switchport access vlan 70
+ spanning-tree portfast
+exit
+
+! LOgistics
+interface range fa0/6-8
+ switchport mode access
+ switchport access vlan 60
+ spanning-tree portfast
+exit
+
+end
+write memory
+
+! Verification
+show vlan brief
+show interfaces trunk
