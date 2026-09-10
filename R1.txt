@@ -1,0 +1,76 @@
+R1-ROUTER
+==========
+Enterprise Multi-Floor Network
+
+hostname F1-ROUTER
+
+enable password cisco
+
+ip dhcp pool Reception
+ network 192.168.8.0 255.255.255.0
+ default-router 192.168.8.1
+ network 192.168.7.0 0.0.0.255 area 0
+  dns-server 8.8.8.8
+
+ip dhcp pool Store
+ network 192.168.7.0 255.255.255.0
+ default-router 192.168.7.1
+  dns-server 8.8.8.8
+
+ip dhcp pool Logistics
+ network 192.168.6.0 255.255.255.0
+ default-router 192.168.6.1
+ dns-server 8.8.8.8
+
+
+interface GigabitEthernet0/0
+ no ip address
+ duplex auto
+ speed auto
+
+interface GigabitEthernet0/0.80
+ encapsulation dot1Q 80
+ ip address 192.168.8.1 255.255.255.0
+
+interface GigabitEthernet0/0.70
+ encapsulation dot1Q 70
+ ip address 192.168.7.1 255.255.255.0
+
+interface GigabitEthernet0/0.60
+ encapsulation dot1Q 60
+ ip address 192.168.6.1 255.255.255.0
+
+
+interface Serial0/3/0
+ ip address 10.0.0.6 255.255.255.252
+
+interface Serial0/3/1
+ ip address 10.0.0.10 255.255.255.252
+ clock rate 64000
+
+interface Vlan1
+ no ip address
+ shutdown
+
+router ospf 10
+ log-adjacency-changes
+ network 10.0.0.4 0.0.0.3 area 0
+ network 10.0.0.8 0.0.0.3 area 0
+ network 192.168.8.0 0.0.0.255 area 0
+ network 192.168.7.0 0.0.0.255 area 0
+ network 192.168.6.0 0.0.0.255 area 0
+
+
+ip domain-name mani.com
+
+
+line vty 0 4
+ login
+line vty 5 15
+ login local
+crypto key generate rsa
+ transport input ssh
+
+username mani password cisco
+
+
